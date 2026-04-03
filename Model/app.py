@@ -1,9 +1,11 @@
-# =========================
-# IMPORTS
-# =========================
 import os
 import sys
 import copy
+
+# Reduce TensorFlow startup noise before TensorFlow/Keras is imported anywhere.
+os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
+os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -40,17 +42,22 @@ app = Flask(__name__)
 CORS(app)
 
 # =========================
-# LOAD MODEL ASSETS (FIXED)
+# LOAD MODEL ASSETS
 # =========================
-print("🚀 Initializing API Server...")
-try:
-    MODEL = load_model()
-    SCALER = load_scaler()
-    INDEXERS = load_indexers()
-    print("✅ Model, scaler, indexers loaded successfully")
-except Exception as e:
-    print("❌ FATAL ERROR loading assets:", e)
-    exit(1)
+def initialize_assets():
+    print("🚀 Initializing API Server...")
+    try:
+        model = load_model()
+        scaler = load_scaler()
+        indexers = load_indexers()
+        print("✅ Model, scaler, indexers loaded successfully")
+        return model, scaler, indexers
+    except Exception as e:
+        print("❌ FATAL ERROR loading assets:", e)
+        raise
+
+
+MODEL, SCALER, INDEXERS = initialize_assets()
 
 # =========================
 # HEALTH
@@ -190,4 +197,4 @@ def predict():
 # =========================
 if __name__ == "__main__":
     print("🚀 Server running at http://127.0.0.1:5000")
-    app.run(debug=True, port=5000)
+    app.run(debug=True, use_reloader=False, port=5000)
