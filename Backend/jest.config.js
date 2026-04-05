@@ -1,13 +1,14 @@
 export default {
   testEnvironment: "node",
-  roots: ["<rootDir>/tests"],
+  roots: ["<rootDir>/../tests/backend"],
   testMatch: ["**/*.test.js"],
-  collectCoverageFrom: [
-    "src/**/*.js",
-    "!src/index.js",
-    "!src/db/**/*.js",
-    "!src/constants.js",
-  ],
-  coverageDirectory: "coverage",
+  clearMocks: true,
   transform: {},
+  moduleDirectories: ["node_modules", "<rootDir>/node_modules"],
+  collectCoverageFrom: [
+    "<rootDir>/src/controllers/**/*.js",
+    "<rootDir>/src/routes/**/*.js",
+    "<rootDir>/src/models/**/*.js",
+  ],
+  coverageDirectory: "<rootDir>/../reports/raw/backend-coverage",
 };

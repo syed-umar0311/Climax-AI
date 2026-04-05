@@ -9,7 +9,8 @@
   "scripts": {
     "start": "nodemon src/index.js",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.js",
-    "test:coverage": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.js --coverage"
+    "test:coverage": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.js --coverage",
+    "test:json": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.js --runInBand --json --outputFile ../reports/raw/backend-results.json"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
