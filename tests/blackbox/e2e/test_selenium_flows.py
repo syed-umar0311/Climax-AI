@@ -43,13 +43,13 @@ def test_prediction_visualization_and_csv_download(browser, e2e_url):
     assert download_status.text == "CSV generated successfully"
 
 
-def test_intentional_failure_visualization_title(browser, e2e_url):
+def test_prediction_visualization_is_hidden_until_prediction_runs(browser, e2e_url):
+    # Arrange
     browser.get(e2e_url)
 
-    browser.find_element(By.ID, "predict-btn").click()
+    visualization = browser.find_element(By.ID, "visualization")
+    download_status = browser.find_element(By.ID, "download-status")
 
-    chart_title = WebDriverWait(browser, 5).until(
-        EC.visibility_of_element_located((By.ID, "chart-title")),
-    )
-
-    assert chart_title.text == "Heatmap Visualization"
+    # Assert
+    assert visualization.value_of_css_property("display") == "none"
+    assert download_status.text == "Download pending"

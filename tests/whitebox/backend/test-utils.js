@@ -45,19 +45,19 @@ export async function loadBackendApp({
 
   const generateGeminiInsights = jest.fn(async () => geminiResult);
 
-  jest.unstable_mockModule("../../Backend/src/models/user.model.js", () => ({
+  jest.unstable_mockModule("../../../Backend/src/models/user.model.js", () => ({
     default: userModel,
   }));
 
-  jest.unstable_mockModule("../../Backend/src/db/prisma.js", () => ({
+  jest.unstable_mockModule("../../../Backend/src/db/prisma.js", () => ({
     default: prisma,
   }));
 
-  jest.unstable_mockModule("../../Backend/src/utils/gemini.js", () => ({
+  jest.unstable_mockModule("../../../Backend/src/utils/gemini.js", () => ({
     generateGeminiInsights,
   }));
 
-  const { default: app } = await import("../../Backend/src/app.js");
+  const { default: app } = await import("../../../Backend/src/app.js");
 
   return { app, userModel, prisma, generateGeminiInsights };
 }

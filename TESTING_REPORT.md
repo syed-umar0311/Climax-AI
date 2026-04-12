@@ -1,7 +1,7 @@
 # FYP Testing Report
 
 ## Overview
-This testing framework was designed for a full-stack Final Year Project that combines an Express backend, a React frontend, a Python-based prediction model, and Selenium-driven end-to-end user journeys. The framework follows both white-box and black-box principles to ensure that internal logic, external behavior, and user-facing workflows are validated in a structured and academically defensible manner.
+This testing framework was designed for a full-stack Final Year Project that combines an Express backend, a React frontend, a Python-based prediction model, and Selenium-driven end-to-end user journeys. The framework now organizes the `tests` directory directly by testing perspective, separating white-box and black-box cases so the structure matches the reporting output.
 
 ## Testing Strategy
 The framework implements the following complementary testing layers:
@@ -15,16 +15,30 @@ The framework implements the following complementary testing layers:
 | Validation Testing | Confirms the system satisfies functional FYP requirements | Auth, historical analytics, predictions, downloads, explainability-oriented output handling, and report generation are all mapped to project features |
 
 ## White-Box and Black-Box Coverage
-White-box testing is represented through unit and integration tests that target the internal control flow of controllers, page logic, utility methods, and model preprocessing/inference behavior. These tests intentionally inspect validation branches, route decisions, transformed payloads, and aggregation logic.
+White-box testing is represented through the suites in:
 
-Black-box testing is represented through Selenium automation that interacts with the application harness in the same manner as an end user. These tests do not depend on implementation details and instead validate externally visible behavior such as login success feedback, prediction execution, visualization display, and CSV download signaling.
+```text
+tests/whitebox/backend
+tests/whitebox/frontend
+tests/whitebox/model
+```
+
+These unit and integration tests target the internal control flow of controllers, page logic, utility methods, and model preprocessing or inference behavior. They intentionally inspect validation branches, route decisions, transformed payloads, and aggregation logic.
+
+Black-box testing is represented through the suite in:
+
+```text
+tests/blackbox/e2e
+```
+
+These Selenium tests interact with the application harness in the same manner as an end user. They do not depend on implementation details and instead validate externally visible behavior such as login success feedback, prediction execution, visualization display, and CSV download signaling.
 
 ## Tools and Frameworks
 - Backend: Jest with Supertest
 - Frontend: React Testing Library with the existing Vitest runner in this Vite-based frontend
 - Model: PyTest
 - End-to-End: Selenium for browser-driven black-box testing
-- Reporting: JSON, JUnit XML, pytest-html, and a custom Node.js merge script producing `/reports/final-report.html`
+- Reporting: JSON, JUnit XML, and a custom Node.js merge script producing a single `/reports/final-report.html`
 
 ## Test Design Approach
 Backend tests were written around the current Express route structure and mock the MongoDB, Prisma, and Gemini integration boundaries. This allows route behavior, validation, error handling, and response contracts to be verified without requiring live infrastructure.
@@ -61,7 +75,7 @@ The entire framework is orchestrated through one command:
 npm run test:all
 ```
 
-This command executes backend, frontend, model, and Selenium suites, captures raw outputs, and generates the combined HTML report at:
+This command executes backend, frontend, model, and Selenium suites, captures raw outputs, and generates one consolidated HTML report grouped into white-box and black-box sections at:
 
 ```text
 reports/final-report.html

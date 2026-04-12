@@ -18,6 +18,7 @@ describe("Backend auth and history routes", () => {
   });
 
   it("creates a user on successful signup", async () => {
+    // Arrange
     const createdUser = { _id: "user-1" };
     const publicUser = {
       _id: "user-1",
@@ -35,12 +36,14 @@ describe("Backend auth and history routes", () => {
       },
     });
 
+    // Act
     const response = await request(app).post("/api/v1/user/signup").send({
       fullName: "Ada Lovelace",
       email: "ada@example.com",
       password: "secret123",
     });
 
+    // Assert
     expect(response.status).toBe(201);
     expect(userModel.create).toHaveBeenCalledWith({
       fullName: "Ada Lovelace",
@@ -48,6 +51,38 @@ describe("Backend auth and history routes", () => {
       password: "secret123",
     });
     expect(response.body.user).toEqual(publicUser);
+  });
+
+  it("rejects signup when the password is shorter than 8 characters", async () => {
+    // Arrange
+    const { app, userModel } = await loadBackendApp({
+      userModelOverrides: {
+        findOne: jest.fn().mockResolvedValue(null),
+        create: jest.fn().mockResolvedValue({ _id: "user-short" }),
+        findById: jest.fn(() => ({
+          select: jest.fn().mockResolvedValue({
+            _id: "user-short",
+            fullName: "Ada Lovelace",
+            email: "ada@example.com",
+          }),
+        })),
+      },
+    });
+
+    // Act
+    const response = await request(app).post("/api/v1/user/signup").send({
+      fullName: "Ada Lovelace",
+      email: "ada@example.com",
+      password: "secret7",
+    });
+
+    // Assert
+    expect(response.status).toBe(400);
+    expect(response.body).toMatchObject({
+      status: "failed",
+      message: expect.stringContaining("at least 8 characters"),
+    });
+    expect(userModel.create).not.toHaveBeenCalled();
   });
 
   it("rejects login when the password is invalid", async () => {
@@ -180,11 +215,4 @@ describe("Backend auth and history routes", () => {
     expect(response.body.message).toBe("Logout successful");
   });
 
-  it("INTENTIONAL FAILURE: expects logout to use HTTP 204 for stricter API semantics", async () => {
-    const { app } = await loadBackendApp();
-
-    const response = await request(app).post("/api/v1/user/logout");
-
-    expect(response.status).toBe(204);
-  });
 });

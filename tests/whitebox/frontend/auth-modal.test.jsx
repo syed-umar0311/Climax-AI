@@ -1,13 +1,14 @@
+import "../../../Frontend/src/test/setup.js";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("../../Frontend/src/utils/api.js", () => ({
+vi.mock("../../../Frontend/src/utils/api.js", () => ({
   apiFetch: vi.fn(),
 }));
 
-import AuthModal from "../../Frontend/src/Pages/AuthModal.jsx";
-import { apiFetch } from "../../Frontend/src/utils/api.js";
+import AuthModal from "../../../Frontend/src/Pages/AuthModal.jsx";
+import { apiFetch } from "../../../Frontend/src/utils/api.js";
 
 describe("Frontend AuthModal", () => {
   it("logs a user in and forwards the user payload", async () => {
@@ -52,6 +53,30 @@ describe("Frontend AuthModal", () => {
 
     expect(window.alert).toHaveBeenCalledWith("Passwords do not match");
     expect(apiFetch).not.toHaveBeenCalled();
+  });
+
+  it("prevents signup when the password is shorter than 8 characters", async () => {
+    // Arrange
+    apiFetch.mockReset();
+    const user = userEvent.setup();
+    const { container } = render(<AuthModal onLoginSuccess={vi.fn()} />);
+
+    // Act
+    await user.click(screen.getByRole("button", { name: /create one/i }));
+    await screen.findByRole("button", { name: /create account/i });
+    await user.type(screen.getByPlaceholderText(/hahsir ahmed/i), "QA User");
+    await user.type(screen.getByPlaceholderText(/you@example\.com/i), "qa@example.com");
+
+    const passwordInputs = container.querySelectorAll('input[type="password"]');
+    await user.type(passwordInputs[0], "short7");
+    await user.type(passwordInputs[1], "short7");
+    await user.click(screen.getByRole("button", { name: /create account/i }));
+
+    // Assert
+    expect(apiFetch).not.toHaveBeenCalled();
+    expect(window.alert).toHaveBeenCalledWith(
+      expect.stringContaining("at least 8 characters"),
+    );
   });
 
   it("INTENTIONAL FAILURE: expects the primary auth action label to be 'Log In'", async () => {

@@ -7,8 +7,10 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.edge.options import Options as EdgeOptions
 
 
-ROOT_DIR = Path(__file__).resolve().parents[2]
-FIXTURE_URL = (ROOT_DIR / "tests" / "e2e" / "fixtures" / "mock-fyp-app.html").resolve().as_uri()
+ROOT_DIR = Path(__file__).resolve().parents[3]
+FIXTURE_URL = (
+    ROOT_DIR / "tests" / "blackbox" / "e2e" / "fixtures" / "mock-fyp-app.html"
+).resolve().as_uri()
 
 
 @pytest.fixture(scope="session")

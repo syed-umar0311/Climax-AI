@@ -54,17 +54,32 @@ def test_run_inference_with_mocked_preprocessing(monkeypatch):
     assert result["total_emissions"] == sum(range(1, 13)) * 2
 
 
-def test_intentional_failure_model_outputs_should_not_all_be_zero(monkeypatch):
+def test_run_inference_returns_empty_totals_when_preprocessing_yields_no_sequences(monkeypatch):
+    # Arrange
+    class TrackingModel:
+        def __init__(self):
+            self.called = False
+
+        def predict(self, _inputs):
+            self.called = True
+            return np.array([[0.0] * 12])
+
+    model = TrackingModel()
     monkeypatch.setattr(
         "api_utils.inference.preprocess_input",
-        lambda *_args, **_kwargs: build_preprocessed_data(),
+        lambda *_args, **_kwargs: {},
     )
 
+    # Act
     result = run_inference(
         {"country": "PAK"},
-        StubModel(),
+        model,
         scaler_model={},
         indexers={},
     )
 
-    assert result["total_emissions"] == 0
+    # Assert
+    assert model.called is False
+    assert result["subsector_emissions"] == {}
+    assert result["monthly_emissions"] == [0.0] * 12
+    assert result["total_emissions"] == 0.0

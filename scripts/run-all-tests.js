@@ -18,14 +18,13 @@ for (const entry of fs.readdirSync(rawDir)) {
 const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
 const pythonCommand = path.join(rootDir, "Model", ".venv310", "Scripts", "python.exe");
 const modelXmlPath = path.join(rawDir, "model-results.xml");
-const modelHtmlPath = path.join(rawDir, "model-report.html");
 const e2eXmlPath = path.join(rawDir, "e2e-results.xml");
-const e2eHtmlPath = path.join(rawDir, "e2e-report.html");
 
 const suites = [
   {
     key: "backend",
     label: "Backend",
+    category: "whitebox",
     commandType: "npm",
     command: npmCommand,
     args: ["run", "test:json"],
@@ -34,6 +33,7 @@ const suites = [
   {
     key: "frontend",
     label: "Frontend",
+    category: "whitebox",
     commandType: "npm",
     command: npmCommand,
     args: ["run", "test:json"],
@@ -42,32 +42,28 @@ const suites = [
   {
     key: "model",
     label: "Model",
+    category: "whitebox",
     command: pythonCommand,
     args: [
       "-m",
       "pytest",
-      "tests/model",
+      "tests/whitebox/model",
       "--junitxml",
       modelXmlPath,
-      "--html",
-      modelHtmlPath,
-      "--self-contained-html",
     ],
     cwd: rootDir,
   },
   {
     key: "e2e",
     label: "E2E",
+    category: "blackbox",
     command: pythonCommand,
     args: [
       "-m",
       "pytest",
-      "tests/e2e",
+      "tests/blackbox/e2e",
       "--junitxml",
       e2eXmlPath,
-      "--html",
-      e2eHtmlPath,
-      "--self-contained-html",
     ],
     cwd: rootDir,
   },
@@ -102,6 +98,7 @@ for (const suite of suites) {
   summary.push({
     key: suite.key,
     label: suite.label,
+    category: suite.category,
     command: [invocation.command, ...invocation.args].join(" "),
     exitCode,
     startedAt,

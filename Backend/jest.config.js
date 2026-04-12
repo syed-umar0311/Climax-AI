@@ -1,6 +1,6 @@
 export default {
   testEnvironment: "node",
-  roots: ["<rootDir>/../tests/backend"],
+  roots: ["<rootDir>/../tests/whitebox/backend"],
   testMatch: ["**/*.test.js"],
   clearMocks: true,
   transform: {},

@@ -1,61 +1,62 @@
+import "../../../Frontend/src/test/setup.js";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("../../Frontend/src/utils/api.js", () => ({
+vi.mock("../../../Frontend/src/utils/api.js", () => ({
   apiFetch: vi.fn(),
   predictionFetch: vi.fn(),
 }));
 
-vi.mock("../../Frontend/src/components/ForecastsConfiguration.jsx", () => ({
+vi.mock("../../../Frontend/src/components/ForecastsConfiguration.jsx", () => ({
   default: () => <div>Forecast Config Stub</div>,
 }));
 
-vi.mock("../../Frontend/src/components/PredictionSkeleton.jsx", () => ({
+vi.mock("../../../Frontend/src/components/PredictionSkeleton.jsx", () => ({
   default: () => <div>Prediction Loading</div>,
 }));
 
-vi.mock("../../Frontend/src/components/EmissionPrediction.jsx", () => ({
+vi.mock("../../../Frontend/src/components/EmissionPrediction.jsx", () => ({
   default: ({ prediction }) => (
     <div>Prediction Total: {prediction.data.total_emissions}</div>
   ),
 }));
 
-vi.mock("../../Frontend/src/components/MonthlyTrends.jsx", () => ({
+vi.mock("../../../Frontend/src/components/MonthlyTrends.jsx", () => ({
   default: () => <div>Monthly Trends Stub</div>,
 }));
 
-vi.mock("../../Frontend/src/components/LLMResponse.jsx", () => ({
+vi.mock("../../../Frontend/src/components/LLMResponse.jsx", () => ({
   default: ({ response }) => <div>LLM: {response}</div>,
 }));
 
-vi.mock("../../Frontend/src/components/Filters.jsx", () => ({
+vi.mock("../../../Frontend/src/components/Filters.jsx", () => ({
   default: () => <div>Filters Stub</div>,
 }));
 
-vi.mock("../../Frontend/src/components/DashboardSkeleton.jsx", () => ({
+vi.mock("../../../Frontend/src/components/DashboardSkeleton.jsx", () => ({
   default: () => <div>Dashboard Loading</div>,
 }));
 
-vi.mock("../../Frontend/src/components/Emission.jsx", () => ({
+vi.mock("../../../Frontend/src/components/Emission.jsx", () => ({
   default: ({ historicalData }) => (
     <div>Historical Total: {historicalData.total_emission_overall}</div>
   ),
 }));
 
-vi.mock("../../Frontend/src/components/DashboardVisualizations.jsx", () => ({
+vi.mock("../../../Frontend/src/components/DashboardVisualizations.jsx", () => ({
   default: () => <div>Dashboard Visualizations Stub</div>,
 }));
 
-vi.mock("../../Frontend/src/components/EmissionsBySector.jsx", () => ({
+vi.mock("../../../Frontend/src/components/EmissionsBySector.jsx", () => ({
   default: () => <div>Sector Breakdown Stub</div>,
 }));
 
-import Prediction from "../../Frontend/src/Pages/Prediction.jsx";
-import Dashboard from "../../Frontend/src/Pages/Dashboard.jsx";
+import Prediction from "../../../Frontend/src/Pages/Prediction.jsx";
+import Dashboard from "../../../Frontend/src/Pages/Dashboard.jsx";
 import {
   apiFetch,
   predictionFetch,
-} from "../../Frontend/src/utils/api.js";
+} from "../../../Frontend/src/utils/api.js";
 
 describe("Frontend dashboard and prediction pages", () => {
   it("fetches prediction data on mount and renders the resulting widgets", async () => {

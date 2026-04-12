@@ -2,37 +2,41 @@
   {
     "key": "backend",
     "label": "Backend",
+    "category": "whitebox",
     "command": "cmd.exe /c npm.cmd run test:json",
     "exitCode": 1,
-    "startedAt": 1775406293127,
-    "finishedAt": 1775406319496,
-    "durationMs": 26369
+    "startedAt": 1776010016244,
+    "finishedAt": 1776010040029,
+    "durationMs": 23785
   },
   {
     "key": "frontend",
     "label": "Frontend",
+    "category": "whitebox",
     "command": "cmd.exe /c npm.cmd run test:json",
     "exitCode": 1,
-    "startedAt": 1775406319496,
-    "finishedAt": 1775406358743,
-    "durationMs": 39247
+    "startedAt": 1776010040029,
+    "finishedAt": 1776010081626,
+    "durationMs": 41597
   },
   {
     "key": "model",
     "label": "Model",
-    "command": "D:\\FYP\\Model\\.venv310\\Scripts\\python.exe -m pytest tests/model --junitxml D:\\FYP\\reports\\raw\\model-results.xml --html D:\\FYP\\reports\\raw\\model-report.html --self-contained-html",
-    "exitCode": 1,
-    "startedAt": 1775406358743,
-    "finishedAt": 1775406368159,
-    "durationMs": 9416
+    "category": "whitebox",
+    "command": "D:\\FYP\\Model\\.venv310\\Scripts\\python.exe -m pytest tests/whitebox/model --junitxml D:\\FYP\\reports\\raw\\model-results.xml",
+    "exitCode": 0,
+    "startedAt": 1776010081626,
+    "finishedAt": 1776010088552,
+    "durationMs": 6926
   },
   {
     "key": "e2e",
     "label": "E2E",
-    "command": "D:\\FYP\\Model\\.venv310\\Scripts\\python.exe -m pytest tests/e2e --junitxml D:\\FYP\\reports\\raw\\e2e-results.xml --html D:\\FYP\\reports\\raw\\e2e-report.html --self-contained-html",
-    "exitCode": 1,
-    "startedAt": 1775406368159,
-    "finishedAt": 1775406390883,
-    "durationMs": 22724
+    "category": "blackbox",
+    "command": "D:\\FYP\\Model\\.venv310\\Scripts\\python.exe -m pytest tests/blackbox/e2e --junitxml D:\\FYP\\reports\\raw\\e2e-results.xml",
+    "exitCode": 0,
+    "startedAt": 1776010088552,
+    "finishedAt": 1776010120170,
+    "durationMs": 31618
   }
 ]
